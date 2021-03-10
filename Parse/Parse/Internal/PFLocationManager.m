@@ -114,7 +114,6 @@
     [self.locationManager requestWhenInUseAuthorization];
     [self.locationManager requestLocation];
 #elif TARGET_OS_IOS
-#if APPCLIP
     dispatch_block_t block = ^{
         if (self.application.applicationState != UIApplicationStateBackground &&
             [self.bundle objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"] != nil) {
@@ -126,23 +125,21 @@
     } else {
         dispatch_async(dispatch_get_main_queue(), block);
     }
-#else
-    if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-        dispatch_block_t block = ^{
-            if (self.application.applicationState != UIApplicationStateBackground &&
-                [self.bundle objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"] != nil) {
-                [self.locationManager requestWhenInUseAuthorization];
-            } else {
-                [self.locationManager requestAlwaysAuthorization];
-            }
-        };
-        if ([NSThread currentThread].isMainThread) {
-            block();
-        } else {
-            dispatch_async(dispatch_get_main_queue(), block);
-        }
-    }
-#endif
+//    if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+//        dispatch_block_t block = ^{
+//            if (self.application.applicationState != UIApplicationStateBackground &&
+//                [self.bundle objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"] != nil) {
+//                [self.locationManager requestWhenInUseAuthorization];
+//            } else {
+//                [self.locationManager requestAlwaysAuthorization];
+//            }
+//        };
+//        if ([NSThread currentThread].isMainThread) {
+//            block();
+//        } else {
+//            dispatch_async(dispatch_get_main_queue(), block);
+//        }
+//    }
     [self.locationManager startUpdatingLocation];
 #elif PF_TARGET_OS_OSX
     [self.locationManager startUpdatingLocation];
